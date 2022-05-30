@@ -1,2 +1,3 @@
 # Password-Manager
-A basic implementation of a password manager in Java
+A basic implementation of a password manager in Java \
+Currently WIP
