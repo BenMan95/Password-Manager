@@ -4,12 +4,14 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 class LoginTableModel extends AbstractTableModel {
-
-  private static final String[] COLUMNS = {"Website","Username","Password"};
+  
+  private static final String[] COLUMNS = {"col1","col2","col3"};
   
   private List<String[]> data;
   
-  public void setData(List<String[]> data) { this.data = data; }
+  public void setData(List<String[]> data) {
+    this.data = data;
+  }
   
   @Override public int getRowCount() {
     return data == null ? 0 : data.size();
