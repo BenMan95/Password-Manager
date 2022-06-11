@@ -5,7 +5,7 @@ import java.util.List;
 
 class LoginTableModel extends AbstractTableModel {
   
-  private static final String[] COLUMNS = {"col1","col2","col3"};
+  private static final String[] COLUMNS = {"Website","Username","Password"};
   
   private List<String[]> data;
   

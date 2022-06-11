@@ -1,9 +1,6 @@
 package main;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
+import javax.crypto.*;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 import java.io.File;
@@ -45,23 +42,32 @@ public class EncrypterDecrypter {
   public void encrypt(String content,
                       FileOutputStream outFile) throws InvalidAlgorithmParameterException,
                                                        InvalidKeyException,
-                                                       IOException {
+                                                       IOException,
+                                                       IllegalBlockSizeException,
+                                                       BadPaddingException {
     byte[] salt = new byte[8];
     new Random().nextBytes(salt);
+    outFile.write(salt);
     
     PBEParameterSpec paramSpec = new PBEParameterSpec(salt,100);
     cipher.init(Cipher.ENCRYPT_MODE,key,paramSpec);
+    
     byte[] input = content.getBytes();
     byte[] output = cipher.update(input,0,input.length);
-    
-    outFile.write(salt);
     outFile.write(output);
+    
+    output = cipher.doFinal();
+    if (output != null)
+      outFile.write(output);
+    
     outFile.flush();
   }
   
   public String decrypt(FileInputStream inFile) throws IOException,
                                                        InvalidAlgorithmParameterException,
-                                                       InvalidKeyException {
+                                                       InvalidKeyException,
+                                                       IllegalBlockSizeException,
+                                                       BadPaddingException {
     byte[] salt = new byte[8];
     inFile.read(salt);
   
@@ -70,8 +76,13 @@ public class EncrypterDecrypter {
   
     byte[] input = inFile.readAllBytes();
     byte[] output = cipher.update(input,0,input.length);
+    String msg = new String(output);
     
-    return new String(output);
+    output = cipher.doFinal();
+    if (output != null)
+      msg += new String(output);
+    
+    return msg;
   }
   
 }
